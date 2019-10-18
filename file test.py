@@ -1,5 +1,6 @@
 import random
 import time
+#from tkinter import *
 
 def skillCheck(skill):
     ques = input("Where do you want to roll? (system/irl): ")
@@ -10,6 +11,7 @@ def skillCheck(skill):
         r2 = random.randint(1, 6)
         r3 = random.randint(1, 6)
         rsum = r1 + r2 + r3
+
 
         roll = r1, r2, r3
         roll = str(roll)
