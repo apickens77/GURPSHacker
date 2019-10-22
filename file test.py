@@ -67,6 +67,9 @@ bgLabel.place(x = 0, y = 0)
 topFrame = Frame(root)
 bottomFrame = Frame(root)
 
+#sets the combobox values to the list of programs read in from the file
+comboBox1 = ttk.Combobox(values = progList)
+
 #somethings wierd here
 #it sets the colors but not for the whole combobox
 style = ttk.Style()
@@ -74,9 +77,6 @@ style.map('TCombobox', fieldbackground=[('readonly','black')])
 style.map('TCombobox', selectbackground=[('readonly', 'black')])
 style.map('TCombobox', selectforeground=[('readonly', 'red')])
 comboBox1['state'] = 'readonly'
-
-#sets the combobox values to the list of programs read in from the file
-comboBox1 = ttk.Combobox(values = progList)
 
 #checks what program is being executed and runs the method associated with it
 #VERY INCOMPLETE. Only breach program is implemented
