@@ -56,19 +56,34 @@ while connected:
 #sets up gui window
 root = Tk()
 root["bg"] = "black"
+root.title("GURPS Hacker")
 root.minsize(800, 500)
 
 #grabs image to be used for background. Image size needs changing
 bgImage = PhotoImage(file = "background.png")
-bgLabel = Label(image = bgImage)
-bgLabel.place(x = 0, y = 0)
+w = bgImage.width()
+h = bgImage.height()
+root.geometry("%dx%d+50+30" % (w, h))
+cv = Canvas(width = w, height = h)
+
+cv.create_image(0, 0, image = bgImage, anchor = 'nw')
 
 #adds the top and bottom frame to the root window
-topFrame = Frame(root)
-bottomFrame = Frame(root)
+topFrame = Frame(cv)
+topFrame['bg'] = ''
+bottomFrame = Frame(cv)
+bottomFrame['bg'] = ''
+sideFrame = Frame(cv)
+sideFrame['bg'] = ''
+
+#radio buttons
+v = IntVar()
+
+systemButt = Radiobutton(sideFrame, text = "System", bg = 'black', fg = 'red', variable = v, value = 0)
+irlButt = Radiobutton(sideFrame, text = "IRL", bg = 'black', fg = 'red', variable = v, value = 1)
 
 #sets the combobox values to the list of programs read in from the file
-comboBox1 = ttk.Combobox(values = progList)
+comboBox1 = ttk.Combobox(topFrame, values = progList)
 
 #somethings wierd here
 #it sets the colors but not for the whole combobox
@@ -90,14 +105,19 @@ def execute():
         textBox.insert(END, "You can't do that yet.")
 
 #creates the execure button and textbox where all the relevent info will be displayed
-button1 = Button(topFrame, text = "Execute Program", bg = "black", fg = "red", command = execute)
-textBox = Text(height = 10, bg = "black", fg = "red")
+executeButt = Button(topFrame, text = "Execute Program", bg = "black", fg = "red", command = execute)
+textBox = Text(bottomFrame, height = 10, bg = "black", fg = "red")
+
+#input box
+inpBox = Text(bottomFrame, height = 1, bg = 'black', fg = '#03f6fe')
+inpBox.pack(side = BOTTOM)
 
 #simple method to clear the textbox 
 def clear():
     textBox.delete("1.0", END)
+    inpBox.delete("1.0", END)
     
-clrButton = Button( text = "Clear Window", bg = "black", fg = "red", command = clear)
+clrButton = Button(bottomFrame, text = "Clear Window", bg = "black", fg = "red", command = clear)
 
 #takes the skill level in and simulates a dice roll to check for success
 #taken from the GURPS rulebook
@@ -130,16 +150,39 @@ def skillCheck(skill):
 def breach():
     textBox.insert(END, "Running breach.exe...\n")
 
-    if skillCheck(deck['breach']):
+    """if v == 0:
+        chk = skillCheck(deck['breach'])
+    else:
+        inpBox.insert(END, "What was the roll?: ")
+        chk = inpBox.get(1.0, END).split()[-1]"""
+        
+        
+
+    #chk = int(chk)
+    
+    if skillCheck(chk):
         textBox.insert(END, "You're in.")
     else:
         textBox.insert(END, "No dice.")
 
 #inserts all relevent objects into the gui and sets the main loop to display window
-topFrame.pack()
-button1.pack()
+cv.pack(side = 'bottom', fill = 'both', expand = 'yes')
+topFrame.pack(padx = 20)
+sideFrame.pack(padx = 20, pady = 20)
+clrButton.pack()
+bottomFrame.pack(padx = 20, pady = 200)
+
+executeButt.pack(padx = 20, pady = 20)
+
+systemButt.pack(side = LEFT)
+irlButt.pack(side = LEFT)
 comboBox1.pack()
-textBox.pack(side = BOTTOM)
-clrButton.pack(side = BOTTOM)
-bgLabel.pack()
+textBox.pack()
+
+
+
 root.mainloop()
+if v == 1:
+    inpBox.insert(END, "What was the roll?: ")
+    
+    chk = inpBox.get(1.0, END).split()[-1]
