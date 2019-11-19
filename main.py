@@ -3,6 +3,8 @@ import time
 from tkinter import *
 from tkinter import ttk
 
+import Program as prg
+
 #not used at the moment
 #generates a random string of 0's and 1's from length 200 to 1000
 #used for flavor but doesn't seem to work as well on textboxes
@@ -148,19 +150,13 @@ def skillCheck(skill):
 #runs a skill check against the users breach program skill
 #not much functionality and doesn't account for other system complications
 def breach():
-    textBox.insert(END, "Running breach.exe...\n")
-
-    """if v == 0:
-        chk = skillCheck(deck['breach'])
-    else:
-        inpBox.insert(END, "What was the roll?: ")
-        chk = inpBox.get(1.0, END).split()[-1]"""
-        
-        
-
-    #chk = int(chk)
+    #textBox.insert(END, "Running breach.exe...\n")
     
-    if skillCheck(chk):
+    breach = prg.Breach(deck["breach"])
+    stmt, chk = breach.skillCheck()
+    textBox.insert(END, stmt)
+        
+    if chk:
         textBox.insert(END, "You're in.")
     else:
         textBox.insert(END, "No dice.")
