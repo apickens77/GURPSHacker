@@ -12,6 +12,7 @@ class Program:
         self.__skill = skill
 
     def skillCheck(self):
+        name = "Running " + self.__name +".exe...\n"
         r1 = random.randint(1, 6)
         r2 = random.randint(1, 6)
         r3 = random.randint(1, 6)
@@ -20,7 +21,7 @@ class Program:
 
         roll = r1, r2, r3
         roll = str(roll)
-        stmt = "Skill: " + str(self.__skillLvl) + "\nRoll: " + str(rsum) + roll + "\n"
+        stmt = name + "Skill: " + str(self.__skillLvl) + "\nRoll: " + str(rsum) + roll + "\n"
 
         #returns one value to print contents of roll and one for its success
         return stmt, rsum <= self.__skillLvl + self.__chal
@@ -73,9 +74,3 @@ class Analyze(Program):
     def __init__(self, skill):
         self.setName("Analyze")
         self.setSkillLvl(skill)
-
-breach = Breach(12)
-stmt, succ = breach.skillCheck()
-
-print(stmt)
-print(succ)
