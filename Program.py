@@ -66,11 +66,29 @@ class Program:
 
 class Breach(Program):
     def __init__(self, skill):
-        self.setName("Breach")
-        self.setSkillLvl(skill)
+        super().__init__( "Breach", skill)
 
-    
 class Analyze(Program):
     def __init__(self, skill):
-        self.setName("Analyze")
+        super().__init__( "Analyze", skill)
+
+class Alter(Program):
+    def __init__(self, skill):
+        self.setName("Alter")
         self.setSkillLvl(skill)
+
+    def skillCheck(self, subject):
+        name = "Running alter.exe...\n"
+        r1 = random.randint(1, 6)
+        r2 = random.randint(1, 6)
+        r3 = random.randint(1, 6)
+        rsum = r1 + r2 + r3
+
+
+        roll = r1, r2, r3
+        roll = str(roll)
+        stmt = name + "Skill: " + str(self.getSkillLvl()) + "\nRoll: " + str(rsum) + roll + "\n"
+        
+        #returns one value to print contents of roll and one for its success
+        return stmt, rsum <= self.getSkillLvl() + self.getChallenge()
+        

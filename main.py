@@ -35,26 +35,6 @@ for x in range(len(programs)):
     skill = int(programs[x].split()[1])
     deck[program] = skill
 
-"""
-connected = False
-
-inp = input("You have the connection, ready to breach?(y/n): ")
-
-if inp == 'y':
-    connected = breach()
-
-while connected:
-    
-    print("What's the plan?", progList, ": ")
-    inp = input()
-    if inp == "breach":
-        breach()
-    elif inp == "quit":
-        connected = False
-    else:
-        print("Can't do that yet cowboy.")
-"""
-
 #sets up gui window
 root = Tk()
 root["bg"] = "black"
@@ -101,6 +81,8 @@ def execute():
     textBox.delete('1.0', END)
     if comboBox1.get() == "breach":
         breach()
+    elif comboBox1.get() == "alter":
+        alter()
     elif comboBox1.get() == "":
         textBox.insert(END, "You actually going to do something?")
     else:
@@ -114,44 +96,29 @@ textBox = Text(bottomFrame, height = 10, bg = "black", fg = "red")
 inpBox = Text(bottomFrame, height = 1, bg = 'black', fg = '#03f6fe')
 inpBox.pack(side = BOTTOM)
 
+
+textBox.insert(END, "Enter your ID below...")
+def login():
+    if inpBox.get('1.0', END) == 'password\n':
+        clrButton.configure(text = "Clear Text", command = clear)
+        textBox.delete("1.0", END)
+        inpBox.delete("1.0", END)
+        textBox.insert(END, "Welcome user\nChoose an option above to begin...")
+    else:
+        textBox.delete("1.0", END)
+        textBox.insert(END, "Wrong ID chummer")
+        inpBox.delete("1.0", END)
+
 #simple method to clear the textbox 
 def clear():
     textBox.delete("1.0", END)
     inpBox.delete("1.0", END)
     
-clrButton = Button(bottomFrame, text = "Clear Window", bg = "black", fg = "red", command = clear)
-
-#takes the skill level in and simulates a dice roll to check for success
-#taken from the GURPS rulebook
-def skillCheck(skill):
-    #ques = input("Where do you want to roll? (system/irl): ")
-    #randBinary()
-
-    #if ques == "system":
-    r1 = random.randint(1, 6)
-    r2 = random.randint(1, 6)
-    r3 = random.randint(1, 6)
-    rsum = r1 + r2 + r3
-
-
-    roll = r1, r2, r3
-    roll = str(roll)
-    stmt = "Skill: " + str(skill) + "\nRoll: " + str(rsum) + roll + "\n"
-    textBox.insert(END, stmt)
-    return rsum <= skill
-
-    #option for player to roll dice manually
-    #to be implemented later    
-    """elif ques == "irl":
-        rsum = input("What was the roll?: ")
-        rsum = int(rsum)
-        return rsum < skill"""
+clrButton = Button(bottomFrame, text = "LOGIN", bg = "black", fg = "red", command = login)
 
 #runs a skill check against the users breach program skill
 #not much functionality and doesn't account for other system complications
-def breach():
-    #textBox.insert(END, "Running breach.exe...\n")
-    
+def breach():    
     breach = prg.Breach(deck["breach"])
     stmt, chk = breach.skillCheck()
     textBox.insert(END, stmt)
@@ -160,6 +127,23 @@ def breach():
         textBox.insert(END, "You're in.")
     else:
         textBox.insert(END, "No dice.")
+
+
+def alter():
+    subject = inpBox.get('1.0', END)
+    
+    if subject == '\n':
+        textBox.insert(END, "What are you altering?")
+    else:
+        subject = subject[:-1]
+        alter = prg.Alter(deck["alter"])
+        stmt, chk = alter.skillCheck(subject)
+        textBox.insert(END, stmt)
+            
+        if chk:
+            textBox.insert(END, subject + " successfully changed, backing out.")
+        else:
+            textBox.insert(END, "No dice.")
 
 #inserts all relevent objects into the gui and sets the main loop to display window
 cv.pack(side = 'bottom', fill = 'both', expand = 'yes')
