@@ -66,11 +66,11 @@ class Program:
 
 class Breach(Program):
     def __init__(self, skill):
-        super().__init__( "Breach", skill)
+        super().__init__("Breach", skill)
 
 class Analyze(Program):
     def __init__(self, skill):
-        super().__init__( "Analyze", skill)
+        super().__init__("Analyze", skill)
 
 class Alter(Program):
     def __init__(self, skill):
