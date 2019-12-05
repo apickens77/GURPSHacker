@@ -16,6 +16,16 @@ def randBinary():
         x+=1
     print('')
 
+def ICEcheck():
+    one = random.randint(1, 6)
+    two = random.randint(1, 6)
+    three = random.randint(1, 6)
+
+    if one+two+three >= 15:
+        return True
+    else:
+        return False
+
 #file IO stuff
 file = "starterDeck.txt"
 f = open(file, "r")
@@ -77,16 +87,30 @@ comboBox1['state'] = 'readonly'
 
 #checks what program is being executed and runs the method associated with it
 #VERY INCOMPLETE. Only breach program is implemented
-def execute():
+def execute(event = None):
     textBox.delete('1.0', END)
-    if comboBox1.get() == "breach":
-        breach()
-    elif comboBox1.get() == "alter":
-        alter()
-    elif comboBox1.get() == "":
-        textBox.insert(END, "You actually going to do something?")
+    ice = ICEcheck()
+
+    if ice:
+        textBox.insert(END, "You've been detected. \nTry to break the ice: breach \nBack out: exit")
+
+        if inpBox.get() == "breach":
+            breach()
+        elif inpBox.get == "back":
+            textBox.delete('1.0', END)
+            inpBox.delete('1.0', END)
+        else:
+            textBox.delete('1.0', END)
+            textBox.insert(END, "You probably don't have time to be sitting around cowboy...")
     else:
-        textBox.insert(END, "You can't do that yet.")
+        if comboBox1.get() == "breach":
+            breach()
+        elif comboBox1.get() == "alter":
+            alter()
+        elif comboBox1.get() == "":
+            textBox.insert(END, "You actually going to do something?")
+        else:
+            textBox.insert(END, "You can't do that yet.")
 
 #creates the execure button and textbox where all the relevent info will be displayed
 executeButt = Button(topFrame, text = "Execute Program", bg = "black", fg = "red", command = execute)
@@ -95,6 +119,9 @@ textBox = Text(bottomFrame, height = 10, bg = "black", fg = "red")
 #input box
 inpBox = Text(bottomFrame, height = 1, bg = 'black', fg = '#03f6fe')
 inpBox.pack(side = BOTTOM)
+
+
+executeButt.bind('<Return>', execute)
 
 
 textBox.insert(END, "Enter your ID below...")
@@ -120,6 +147,8 @@ clrButton = Button(bottomFrame, text = "LOGIN", bg = "black", fg = "red", comman
 #not much functionality and doesn't account for other system complications
 def breach():    
     breach = prg.Breach(deck["breach"])
+    breach.setSkillLvl(deck["breach"])
+
     stmt, chk = breach.skillCheck()
     textBox.insert(END, stmt)
         
@@ -137,7 +166,7 @@ def alter():
     else:
         subject = subject[:-1]
         alter = prg.Alter(deck["alter"])
-        stmt, chk = alter.skillCheck(subject)
+        stmt, chk = alter.skillCheck()
         textBox.insert(END, stmt)
             
         if chk:
